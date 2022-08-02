@@ -1,0 +1,17 @@
+# https://github.com/rakshasa/rtorrent/wiki/COMMAND-Execute
+
+# Configure the path where the bash scripts are located
+method.insert = cfg.scriptsdir, private|const|string, (cat,"/downloads/")
+
+# These are the two lines to fix the URL-encoded label, after the hashing is done,
+# i.e. completed download, forced recheck or rtorrent restart.
+# rtorrent events are very limited, event.download.hash_done seemed the best choice for this fix,
+# although a rtorrent restart will re-fix all the torrents (it takes a few milliseconds per torrent)
+method.insert = decode_label, simple, (cat, "execute.capture_nothrow={", (cfg.scriptsdir), "/urldecode.sh, $d.name=, $d.custom1=}")
+method.set_key = event.download.hash_done, fixedlabel, (cat, "d.custom1.set=", "(decode_label)")
+
+# Reporting to a log file (optional)
+# execute command is deprecated, it's replaced by execute2
+method.insert = check_for_readiness, simple, "and={d.complete=,d.custom1=}"
+method.insert = log_report, simple, (cat, "execute2={", (cfg.scriptsdir), "/report.sh, $d.name=, $d.base_path=, $d.loaded_file=, $d.tied_to_file=, $d.hash=, $d.custom1=, $d.complete=}")
+method.set_key = event.download.hash_done, report, "branch={$check_for_readiness=, log_report=}"
