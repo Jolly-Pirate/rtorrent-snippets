@@ -1,2 +1,2 @@
-# rtorrent-snippets
-rtorrent/rutorrent snippets
+# rtorrent snippets
+rtorrent/rutorrent snippets and fixes
