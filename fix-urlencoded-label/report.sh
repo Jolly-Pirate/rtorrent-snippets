@@ -1,13 +1,13 @@
 #!/bin/bash
 enable_logging=true # or set to false
 
-name=$1
-base_path=$2
-loaded_file=$3
-tied_to_file=$4
-hash=$5
-label=$6
-complete=$7
+name="$1"
+base_path="$2"
+loaded_file="$3"
+tied_to_file="$4"
+hash="$5"
+label="$6"
+complete=$"7"
 
 if [ $enable_logging == "true" ]; then
   log_file="log_report.log"
